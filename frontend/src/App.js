@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import NavBar from './components/Navbar'
 import Questions from './components/Questions'
-
+import Question from './components/Question'
 
 class App extends Component {
   render() {
@@ -9,7 +9,7 @@ class App extends Component {
       <div>
         <NavBar />
         <Questions />
-  
+        <Question />
       </div>
     );
   }
