@@ -3,6 +3,9 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const helmet = require('helmet')
 const morgan = require('morgan')
+const jwt = require('express-jwt');
+const jwksRsa = require('jwks-rsa');
+
 
 const app = express()
 
@@ -24,7 +27,7 @@ app.get('/', (req,res) => {
         id: q.id,
         title: q.title,
         description: q.description,
-        answers: q.answers,
+        answers: q.answers.length,
     }))
     res.send(qs)
 })
@@ -36,7 +39,19 @@ app.get('/:id', (req,res) => {
     res.send(question[0])
 })
 
-app.post('/', (req, res) => {
+const checkJwt = jwt({
+    secret: jwksRsa.expressJwtSecret({
+        cache: true,
+        rateLimit: true,
+        jwksRequestsPerMinute: 5,
+        jwksUri: `https://sirk.auth0.com/.well-known/jwks.json`,
+    }),
+    audience: '2Lq20Gd0FgASA4LwjWFPS74AYBqmcvJL',
+    issuer: `https://sirk.auth0.com/`,
+    algorithms: ['RS256']
+})
+
+app.post('/', checkJwt, (req, res) => {
     const {title, description} = req.body
     const newQuestion = {
         id: questions.length + 1,
@@ -48,7 +63,7 @@ app.post('/', (req, res) => {
     res.status(200).send()
 })
 
-app.post('/answer/:id', (req,res) => {
+app.post('/answer/:id', checkJwt, (req,res) => {
     const {answer} = req.body
     const question = questions.filter(q => (q.id === parseInt(req.params.id)))
     if (question.length > 1) return res.status(500).send()
