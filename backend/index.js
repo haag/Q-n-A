@@ -57,7 +57,8 @@ app.post('/', checkJwt, (req, res) => {
         id: questions.length + 1,
         title,
         description,
-        answers: []
+        answers: [],
+        author: req.user.name
     }
     questions.push(newQuestion)
     res.status(200).send()
@@ -70,6 +71,7 @@ app.post('/answer/:id', checkJwt, (req,res) => {
     if (question.length === 0) return res.status(404).send()
     question[0].answers.push({
         answer,
+        author: req.user.name,
     })
     res.status(200).send()
 })
