@@ -14,6 +14,9 @@ app.use(bodyParser.json())
 app.use(cors())
 app.use(morgan('combined'))
 
+app.get('/', (req,res) => {
+    res.send("The app is running")
+})
 
 app.get('/', (req,res) => {
     const qs = questions.map(q => ({
