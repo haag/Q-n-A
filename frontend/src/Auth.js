@@ -5,8 +5,8 @@ class Auth {
     constructor() {
         this.auth0 = new auth0.WebAuth({
             domain: "sirk.auth0.com",
-            clientId: '2Lq20Gd0FgASA4LwjWFPS74AYBqmcvJL',
             audience: 'https://sirk.auth0.com/userinfo',
+            clientID: '2Lq20Gd0FgASA4LwjWFPS74AYBqmcvJL',
             redirectUri: 'http://localhost:3000/callback',
             responseType: 'token id_token',
             scope: 'openid profile'

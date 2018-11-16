@@ -2,16 +2,17 @@ import React from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import auth0Client from '../Auth'
 
-const NavBar = () => {
+
+function NavBar(props) {
     const signOut = () => {
-        auth0Client.signOut()
-        props.history.replace('/')
-    }
+      auth0Client.signOut();
+      props.history.replace('/');
+    };
 
     return (
         <nav className="navbar navbar-dark bg-primary fixed-top">
             <Link className="navbar-brand" to="/">
-                Q&A
+                Auth0 Tester
             </Link>
         
         {!auth0Client.isAuthenticated() &&
