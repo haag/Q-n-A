@@ -6,9 +6,21 @@ import {Route} from 'react-router-dom'
 import Callback from './components/Callback';
 import NewQuestion from './components/NewQuestion'
 import SecuredRoute from './components/SecuredRoute'
+import auth0Client from './Auth';
 
 
 class App extends Component {
+  async componentDidMount() {
+    if(this.props.location.pathname === './callback') return
+    try {
+      await auth0Client.silentAuth()
+      this.forceUpdate()
+    } catch (err) {
+      if(err.error === 'login_required') return
+      console.log(err.error)
+    }
+  }
+  
   render() {
     return (
       <div>

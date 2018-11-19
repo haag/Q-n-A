@@ -40,20 +40,38 @@ class Auth {
             if (!authResult || !authResult.idToken) {
               return reject(err);
             }
-            this.idToken = authResult.idToken;
-            this.profile = authResult.idTokenPayload;
-            // set the time that the id token will expire at
-            this.expiresAt = authResult.expiresIn * 1000 + new Date().getTime();
+            this.setSession(authResult)
             resolve();
           });
         })
       }
+
+      setSession(authResult) {
+        this.idToken = authResult.idToken;
+        this.profile = authResult.idTokenPayload;
+        this.expiresAt = authResult.expiresIn * 1000 + new Date().getTime();
+            
+      }
     
       signOut() {
+        this.auth0.logout({
+          returnTo: 'http://localhost:3000',
+          clientID: '2Lq20Gd0FgASA4LwjWFPS74AYBqmcvJL'
+        })
         // clear id token, profile, and expiration
-        this.idToken = null;
-        this.profile = null;
-        this.expiresAt = null;
+        // this.idToken = null;
+        // this.profile = null;
+        // this.expiresAt = null;
+      }
+      
+      silentAuth() {
+        return new Promise (( resolve, reject) => {
+          this.auth0.checkSession({}, (err, authResult) => {
+            if(err) return reject(err)
+            this.setSession(authResult)
+            resolve()
+          })
+        })
       }
     }
     
