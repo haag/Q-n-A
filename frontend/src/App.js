@@ -4,6 +4,9 @@ import Questions from './components/Questions'
 import Question from './components/Question'
 import {Route} from 'react-router-dom'
 import Callback from './components/Callback';
+import NewQuestion from './components/NewQuestion'
+import SecuredRoute from './components/SecuredRoute'
+
 
 class App extends Component {
   render() {
@@ -13,6 +16,7 @@ class App extends Component {
         <Route exact path='/' component={Questions} />
         <Route exact path='/question/:questionId' component={Question} />
         <Route exact path='/callback' component={Callback} />
+        <SecuredRoute path='/new-question' component={NewQuestion} />
       </div>
     );
   }
