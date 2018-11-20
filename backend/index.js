@@ -78,13 +78,8 @@ app.post('/answer/:id', checkJwt, (req,res) => {
 
 app.delete('/:id', checkJwt, (req, res) => {
     const { id } = req.params
-    console.log('id', id);
-    // const toDelete = questions.filter(q => (q.id === parseInt(id)))
     questions = questions.filter(q => (q.id != id))
-    console.log('questions', questions);
     res.status(200).json(questions)
-
-
 })
 
 

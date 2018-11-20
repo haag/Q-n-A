@@ -33,6 +33,18 @@ class Question extends Component {
     await this.refreshQuestion();
   }
 
+  async deleteQuestion() {
+    const id = this.props.match.params.questionId
+    console.log("Params", this.props.match.params.questionId)
+    await axios.delete(`http://localhost:8081/${id}`,
+      { 
+        headers: {'Authorization': `Bearer ${auth0Client.getIdToken()}` }
+      }
+    )
+    this.props.history.push('/')
+  }
+  
+
 
   render() {
     const {question} = this.state;
@@ -44,6 +56,7 @@ class Question extends Component {
             <h1 className="display-3">{question.title}</h1>
             <p className="lead">{question.description}</p>
             <hr className="my-4" />
+            <button onClick={() => {this.deleteQuestion()}}>DELETE</button>
             <SubmitAnswer questionId={question.id} submitAnswer={this.submitAnswer} />
             <p>Answers:</p>
             {
