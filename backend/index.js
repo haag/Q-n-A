@@ -61,7 +61,7 @@ app.post('/', checkJwt, (req, res) => {
         author: req.user.name
     }
     questions.push(newQuestion)
-    res.status(200).send()
+    res.status(201).send()
 })
 
 app.post('/answer/:id', checkJwt, (req,res) => {
@@ -82,6 +82,16 @@ app.delete('/:id', checkJwt, (req, res) => {
     res.status(200).json(questions)
 })
 
+app.put('/:id', checkJwt, (req, res) => {
+    const { id } = req.params
+    let questionIndex = questions.findIndex(q => q.id == id)
+    if (questionIndex >= 0) {
+        questions[questionIndex] = {...questions[questionIndex], ...req.body}
+        res.status(200).json(questions)
+    } else {
+        res.status(404).json({ msg: `cannot find q with id ${id}`})
+    }
+})
 
 app.listen(8081, () => {
     console.log('Listening on port 8081')
