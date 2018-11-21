@@ -8,10 +8,19 @@ class Question extends Component {
     super(props);
     this.state = {
       question: null,
+      title: '',
+      description: '',
+
     };
     this.submitAnswer = this.submitAnswer.bind(this)
   }
 
+  updateTitle = (e) => {
+    this.setState({ title: e.target.value }) };
+
+    makeEditable() {
+
+    }
   async componentDidMount() {
     await this.refreshQuestion()
   }
@@ -37,13 +46,27 @@ class Question extends Component {
     const id = this.props.match.params.questionId
     console.log("Params", this.props.match.params.questionId)
     await axios.delete(`http://localhost:8081/${id}`,
-      { 
-        headers: {'Authorization': `Bearer ${auth0Client.getIdToken()}` }
-      }
+    { 
+      headers: {'Authorization': `Bearer ${auth0Client.getIdToken()}` }
+    }
     )
     this.props.history.push('/')
   }
   
+  async updateQuestion() {
+    let question = {}
+    question.title = "hello"
+    console.log('question', question);
+    const id = this.props.match.params.questionId
+    // console.log("ID: ", id)
+    // console.log("ID TOKEN", auth0Client.getIdToken())
+    await axios.put(`http://localhost:8081/${id}`, question,
+      { 
+        headers: {'Authorization': `Bearer ${auth0Client.getIdToken()}` }
+      }
+    )
+    // this.props.history.push('/')
+  }
 
 
   render() {
@@ -53,12 +76,13 @@ class Question extends Component {
       <div className="container">
         <div className="row">
           <div className="jumbotron col-12">
-            <h1 className="display-3">{question.title}</h1>
+            <h1 className="display-3" onDoubleClick={this.makeEditable}>{question.title}</h1>
             <p className="lead">{question.description}</p>
             <hr className="my-4" />
             <button onClick={() => {this.deleteQuestion()}}>DELETE</button>
+            <button onClick={() => {this.updateQuestion()}}>UPDATE</button>
             <SubmitAnswer questionId={question.id} submitAnswer={this.submitAnswer} />
-            <p>Answers:</p>
+            <p contentEditable="true">Answers:</p>
             {
               question.answers.map((answer, idx) => (
                 <p className="lead" key={idx}>{answer.answer}</p>
